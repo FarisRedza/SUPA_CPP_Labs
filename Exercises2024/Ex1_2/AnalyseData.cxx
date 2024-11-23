@@ -4,10 +4,15 @@
 #include "CustomFunctions.h"
 
 int main() {
-    std::string file_name = "input2D_float.txt";
-    std::vector<std::string> text = read_file(file_name);
+    std::string data_file_name = "input2D_float.txt";
+    std::vector<std::string> data = read_file(data_file_name);
+    std::vector<Point> data_points = strings_to_points(data);
 
-    std::vector<Point> points = strings_to_points(text);
+    std::string error_file_name = "error2D_float.txt";
+    std::vector<std::string> error = read_file(error_file_name);
+    std::vector<Point> error_points = strings_to_points(error);
+
+    int data_size = data_points.size();
 
     int user_input;
     std::cout << "Select function" << std::endl;
@@ -18,21 +23,20 @@ int main() {
         std::cin.clear();
         std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
     }
-    int n;
-    std::cout << "Enter a value of n (number of lines): ";
-    while (!(std::cin >> n) || n < 1) {
-        std::cout << "Invalid input. Please enter a positive non-zero integer: ";
-        std::cin.clear(); 
-        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-    }
+    // std::cout << "Enter a value of n (number of lines): ";
+    // while (!(std::cin >> data_size) || data_size < 1) {
+    //     std::cout << "Invalid input. Please enter a positive non-zero integer: ";
+    //     std::cin.clear(); 
+    //     std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+    // }
     switch (user_input) {
         case 1: {
-            print_n_lines(points, n);
+            print_n_lines(data_points, data_size);
             break;
         }
         case 2: {
-            std::vector<float> magnitudes = calculate_magnitude(points);
-            print_n_lines(magnitudes, n);
+            std::vector<float> magnitudes = calculate_magnitude(data_points);
+            print_n_lines(magnitudes, data_size);
             break;
         }
         default:
@@ -40,6 +44,6 @@ int main() {
     }
 
     std::vector<std::string> data_linear_fit;
-    data_linear_fit.push_back(linear_fit(points));
+    data_linear_fit.push_back(least_squares(data_points, error_points));
     print_n_lines(data_linear_fit, 1);
 }

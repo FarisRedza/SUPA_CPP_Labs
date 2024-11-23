@@ -30,4 +30,4 @@ void print_n_lines(std::vector<T> vec, int n) {
     }
 }
 
-std::string linear_fit(std::vector<Point> points);
+std::string least_squares(std::vector<Point> data_points, std::vector<Point> error_points);

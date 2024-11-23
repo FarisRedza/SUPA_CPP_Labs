@@ -43,18 +43,24 @@ std::vector<float> calculate_magnitude(std::vector<Point> points) {
     return magnitudes;
 }
 
-std::string linear_fit(std::vector<Point> points) {
-    float sum_x, sum_y, sum_xy, sum_x2;
-    for (Point point : points) {
-        sum_x += point.x;
-        sum_y += point.y;
-        sum_xy += point.x * point.y;
-        sum_x2 += pow(point.x,2);
+std::string least_squares(std::vector<Point> data_points, std::vector<Point> error_points) {
+    float sum_x = 0, sum_y = 0, sum_xy = 0, sum_x2 = 0;
+    for (Point data_point : data_points) {
+        sum_x += data_point.x;
+        sum_y += data_point.y;
+        sum_xy += data_point.x * data_point.y;
+        sum_x2 += pow(data_point.x,2);
     }
+    int n = data_points.size();
+    float denominator = n * sum_x2 - pow(sum_x,2);
+    float p = (n * sum_xy - sum_x * sum_y) / denominator;
+    float q = (sum_x2 * sum_y - sum_xy * sum_x) / denominator;
 
-    int n = points.size();
-    float p = (n * sum_xy - sum_x * sum_y) / (n * sum_x2 - pow(sum_x,2));
-    float q = (sum_x2 * sum_y - sum_xy * sum_x) / (n * (sum_x2 - pow(sum_x,2)));
+    float expected_y, y_diff2, chi2 = 0;
+    for (int i = 0; i < n; i++) {
+        expected_y = p * data_points[i].x + q;
+        y_diff2 = pow(data_points[i].y - expected_y,2);
+    }
 
     return "y = " + std::to_string(p) + "x + " + std::to_string(q);
 }
