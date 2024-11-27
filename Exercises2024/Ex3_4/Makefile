@@ -1,7 +1,7 @@
 CC=g++ #Name of compiler
 FLAGS=-std=c++20 -w #Compiler flags (the s makes it silent)
 TARGET=Test #Executable name
-OBJECTS=Test.o FiniteFunctions.o
+OBJECTS=Test.o FiniteFunctions.o CustomFunctions.o
 LIBS=-I ../../GNUplot/ -lboost_iostreams
 
 #First target in Makefile is default
@@ -21,3 +21,9 @@ clean: #No targets just run shell command to rm object files and emacs backups
 
 cleantarget: #Delete the exectuable
 	@rm -f ${TARGET}
+
+CustomFunctions.o: ../Ex1_2/CustomFunctions.cxx ../Ex1_2/CustomFunctions.h
+	${CC} ${FLAGS} -c ../Ex1_2/CustomFunctions.cxx
+
+run: ${TARGET}
+	./${TARGET}

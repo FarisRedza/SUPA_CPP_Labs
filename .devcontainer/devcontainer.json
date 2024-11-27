@@ -24,8 +24,17 @@
 				       "analytic-signal.preview-pdf"
 			]
 		}
+	},
+
+	// for running with podman
+	"runArgs": [
+    "--userns=keep-id"
+	],
+	"containerUser": "vscode",
+	"updateRemoteUserUID": true,
+	"containerEnv": {
+		"HOME": "/home/vscode"
 	}
-	
 
 	// Use 'postCreateCommand' to run commands after the container is created.
 	// "postCreateCommand": "pip3 install -r requirements.txt"

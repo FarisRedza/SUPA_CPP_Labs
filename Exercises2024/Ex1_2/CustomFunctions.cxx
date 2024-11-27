@@ -9,7 +9,7 @@ std::vector<std::string> read_file(std::string file_name) {
     std::ifstream file(file_name);
     std::vector<std::string> text;
     if (!file.is_open()) {
-        std::cout << "Error: Unable to open file" << std::endl;
+        throw std::runtime_error("Error opening file: " + file_name);
     } else {
         std::cout << "Opening file " << file_name << std::endl;
         std::string line;

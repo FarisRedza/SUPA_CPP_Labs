@@ -33,3 +33,18 @@ void print_n_lines(std::vector<T> vec, int n) {
 std::string least_squares(std::vector<Point> data_points, std::vector<Point> error_points);
 
 float power(float x, int y);
+
+template<typename T>
+void write_vec_to_file(std::vector<T> vec, std::string file_name) {
+    std::ofstream output_stream;
+    output_stream.open(file_name);
+        if (!output_stream.is_open()) {
+            throw std::runtime_error("Error opening file: " + file_name);
+        } else {
+            std::cout << "Output file: " << file_name << " opened sucessfully" << std::endl;
+            for (int i = 0; i < vec.size(); i++) {
+                output_stream << vec[i] << std::endl;
+            }
+        }
+        output_stream.close();
+}
