@@ -10,7 +10,7 @@ struct Point {
     float x;
     float y;
 
-    friend std::ostream& operator<<(std::ostream &os, const Point &point); //For printing
+    friend std::ostream& operator<<(std::ostream &os, const Point &point); //For printing Point structs
 };
 
 std::vector<std::string> read_file(std::string file_name); //Reads a file and returns a vector of strings

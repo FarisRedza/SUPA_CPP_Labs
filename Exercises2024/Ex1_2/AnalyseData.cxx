@@ -4,22 +4,22 @@
 
 #include "CustomFunctions.h"
 
-// For the program's menu, can add more options but keep All and Quit as last two
-std::vector<std::string> menu_options = {
-    "1) Print data points" ,
-    "2) Calculate magnitude of data points",
-    "3) Fit straight line to data points",
-    "4) Raise x to the power of y for each data point",
-    "5) All of the above",
-    "0) Quit",
-};
+//For the program's menu, can add more options but keep All and Quit as last two
 enum Operations {
     PrintDataPoints = 1,
     CalcMagDataPoints,
     FitLineDataPoints,
     PowerDataPoints,
     All,
-    Quit
+    Quit = 0
+};
+std::vector<std::string> menu_options = {
+    std::to_string(Operations::PrintDataPoints) + ") Print data points" ,
+    std::to_string(Operations::CalcMagDataPoints) + ") Calculate magnitude of data points",
+    std::to_string(Operations::FitLineDataPoints) + ") Fit straight line to data points",
+    std::to_string(Operations::PowerDataPoints) + ") Raise x to the power of y for each data point",
+    std::to_string(Operations::All) + ") All of the above",
+    std::to_string(Operations::Quit) + ") Quit",
 };
 //Get integer input from user in range min <= x < max
 int get_int_input(int range_min, int range_max) {
@@ -72,19 +72,20 @@ int main() {
 
         user_operation = (Operations)user_input;
         switch (user_operation) {
-            case 1: {
+            case PrintDataPoints: {
                 std::cout << "Printing data points" << std::endl;
                 print_n_lines(data_points, data_size);
+                std::cout << user_operation << std::endl;
                 break;
             }
-            case 2: {
+            case CalcMagDataPoints: {
                 std::cout << "Calculating magnitude of data points" << std::endl;
                 std::vector<float> magnitudes = calculate_magnitude(data_points);
                 print_n_lines(magnitudes, data_size);
                 write_vec_to_file(magnitudes, "Outputs/magnitudes.txt");
                 break;
             }
-            case 3: {
+            case FitLineDataPoints: {
                 std::cout << "Fitting straight line to data points" << std::endl;
                 std::vector<std::string> data_linear_fit;
                 data_linear_fit.push_back(least_squares(data_points, error_points));
@@ -92,7 +93,7 @@ int main() {
                 write_vec_to_file(data_linear_fit, "Outputs/linear_fit.txt");
                 break;
             }
-            case 4: {
+            case PowerDataPoints: {
                 std::cout << "Raising x to the power of y for each data point" << std::endl;
                 std::vector<float> results(data_size);
                 for (int i = 0; i < data_size; i++) {
@@ -102,19 +103,20 @@ int main() {
                 write_vec_to_file(results, "Outputs/power_results.txt");
                 break;
             }
-            case 5: {
+            case All: {
                 // Allows for while loop to iterate through each operation
                 take_user_input = false;
                 user_input = 0;
                 break;
             }
-            case 0: {
+            case Quit: {
                 std::cout << "Goodbye!" << std::endl;
                 running = false;
                 break;
             }
             default:
-                throw std::runtime_error("Error: Invalid value for user_input");
+                // throw std::runtime_error("Error: Invalid value for user_input");
+                std::cout << "Invalid input, please try again" << std::endl;
         }
     }
 }

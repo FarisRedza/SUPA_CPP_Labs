@@ -1,5 +1,6 @@
 #include "CustomFunctions.h"
 
+//For printing Point structs
 std::ostream& operator<<(std::ostream &os, const Point &point) {
     os << "(" << point.x << ", " << point.y << ")";
     return os;
