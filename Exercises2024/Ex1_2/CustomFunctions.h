@@ -6,6 +6,7 @@
 #include <sstream>
 #include <cmath>
 
+// Struct for holding x,y data
 struct Point {
     float x;
     float y;
@@ -27,11 +28,11 @@ void print_n_lines(std::vector<T> vec, int n) {
         n = 5;
     }
     for (int i = 0; i < vec.size() && i < n; i++) {
-        std::cout << vec[i] << std::endl;
+        std::cout << vec[i] << std::endl; // Print each element in a separate line
     }
 }
 
-std::string least_squares(std::vector<Point> data_points, std::vector<Point> error_points); // Performs least squares fit on a vector of Point structs
+std::vector<std::string> least_squares(std::vector<Point> data_points, std::vector<Point> error_points); // Performs least squares fit on a vector of Point structs
 
 float power(float x, int y); // Raise a float x to the power of an int y
 
@@ -45,7 +46,7 @@ void write_vec_to_file(std::vector<T> vec, std::string file_name) {
         } else {
             std::cout << "Output file: " << file_name << " opened sucessfully" << std::endl;
             for (int i = 0; i < vec.size(); i++) {
-                output_stream << vec[i] << std::endl;
+                output_stream << vec[i] << std::endl; // Write each element in a separate line
             }
             std::cout << "Finished writing to file " << file_name << std::endl;
         }

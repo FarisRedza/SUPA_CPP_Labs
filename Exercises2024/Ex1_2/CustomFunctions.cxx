@@ -54,9 +54,9 @@ std::vector<float> calculate_magnitude(std::vector<Point> points) {
 }
 
 // Performs least squares fit on a vector of Point structs
-std::string least_squares(std::vector<Point> data_points, std::vector<Point> error_points) {
+std::vector<std::string> least_squares(std::vector<Point> data_points, std::vector<Point> error_points) {
     float sum_x = 0, sum_y = 0, sum_xy = 0, sum_x2 = 0;
-    for (Point data_point : data_points) {
+    for (Point data_point : data_points) { // Build up values using each data_point
         sum_x += data_point.x;
         sum_y += data_point.y;
         sum_xy += data_point.x * data_point.y;
@@ -73,15 +73,22 @@ std::string least_squares(std::vector<Point> data_points, std::vector<Point> err
         expected_y = p * data_points[i].x + q;
         y_diff2 = pow(data_points[i].y - expected_y, 2);
 
-        sigma2 = pow(error_points[i].y, 2) + pow(p * error_points[i].x, 2);
+        sigma2 = pow(error_points[i].y, 2) + pow(p * error_points[i].x, 2); // Account for x and y errors
 
         chi2 += y_diff2 / sigma2;
     }
     // Degrees of freedom
-    float ndf = n - 2;
+    int ndf = n - 2;
     float chi2_over_ndf = chi2 / ndf;
 
-    return "y = " + std::to_string(p) + "x + " + std::to_string(q) + "\nχ^2/NDF = " + std::to_string(chi2_over_ndf);
+    std::vector<std::string> results = {
+        "y = " + std::to_string(p) + "x + " + std::to_string(q),
+        "χ^2 = " + std::to_string(chi2),
+        "NDF = " + std::to_string(ndf),
+        "χ^2/NDF = " + std::to_string(chi2_over_ndf)
+    };
+    // return "y = " + std::to_string(p) + "x + " + std::to_string(q) + "\nχ^2χ^2/NDF = " + std::to_string(chi2_over_ndf);
+    return results;
 }
 
 // Raise a float x to the power of an int y

@@ -1,3 +1,7 @@
+I've added a makefile in the root of the directory to make running and compiling each exercise easier, just run 'make run_ex1_2, run_ex3_4, or run_all' to run from the root directory, or go into the root of each exercise directory and run 'make run'
+
+The 'input2D_float.txt' and 'error2D_float.txt' files must be in the same directory as the binary 'AnalyseData'
+
 # SUPA_Cpp
 Lab exercises and development environment for Glasgow SUPA C++ course, winter 2024
 
