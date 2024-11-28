@@ -10,15 +10,16 @@ struct Point {
     float x;
     float y;
 
-    friend std::ostream& operator<<(std::ostream &os, const Point &point);
+    friend std::ostream& operator<<(std::ostream &os, const Point &point); //For printing
 };
 
-std::vector<std::string> read_file(std::string file_name);
+std::vector<std::string> read_file(std::string file_name); //Reads a file and returns a vector of strings
 
-std::vector<Point> strings_to_points(std::vector<std::string> text);
+std::vector<Point> strings_to_points(std::vector<std::string> text); //Converts strings to Point structs
 
-std::vector<float> calculate_magnitude(std::vector<Point> points);
+std::vector<float> calculate_magnitude(std::vector<Point> points); //Returns the magnitude of a Point
 
+//Prints each element in a vector as a separate line
 template<typename T>
 void print_n_lines(std::vector<T> vec, int n) {
     if (vec.size() > n) {
@@ -30,10 +31,11 @@ void print_n_lines(std::vector<T> vec, int n) {
     }
 }
 
-std::string least_squares(std::vector<Point> data_points, std::vector<Point> error_points);
+std::string least_squares(std::vector<Point> data_points, std::vector<Point> error_points); //Performs least squares fit on a vector of Point structs
 
-float power(float x, int y);
+float power(float x, int y); //Raise a float x to the power of an int y
 
+//Write each element in a vector as a separate line in a file
 template<typename T>
 void write_vec_to_file(std::vector<T> vec, std::string file_name) {
     std::ofstream output_stream;
@@ -45,6 +47,7 @@ void write_vec_to_file(std::vector<T> vec, std::string file_name) {
             for (int i = 0; i < vec.size(); i++) {
                 output_stream << vec[i] << std::endl;
             }
+            std::cout << "Finished writing to file " << file_name << std::endl;
         }
         output_stream.close();
 }
