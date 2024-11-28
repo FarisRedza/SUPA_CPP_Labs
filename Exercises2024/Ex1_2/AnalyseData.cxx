@@ -1,3 +1,9 @@
+// =========================================================================
+// SUPA_CPP
+// Ex1_2
+// Author: Faris Redza
+// =========================================================================
+
 #include <iostream>
 #include <vector>
 #include <sstream>
@@ -5,10 +11,12 @@
 
 #include "CustomFunctions.h"
 
-// For the program's menu, can add more options but keep All and Quit as last two, and values must be continuous ints i.e. 1,2,3
-// Intended to use enum as a safeguard to prevent invalid input from breaking the program like I would do in rust, but couldn't
-// quite achieve the same effect, and is a little redundant now with the other guards I've put in place, kept it around though
-// for nicer readability in the switch and not worrying about what number maps to which operation
+// For the program's menu, can add more options but keep All and Quit as last two
+// Values can be mixed but can't have gaps i.e. 1,2,3 or 2,3,1, and All must have highest value
+// Intended to use enum as a safeguard to prevent invalid input from breaking the program like I
+// would do in rust, but couldn't quite achieve the same effect, and is a little redundant now
+// with the other guards I've put in place, kept it around though for nicer readability in the
+// switch and not worrying about what number maps to which operation
 enum Operations {
     PrintDataPoints = 1,
     CalcMagDataPoints,

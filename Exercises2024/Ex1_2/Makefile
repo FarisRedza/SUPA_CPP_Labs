@@ -15,10 +15,10 @@ AnalyseData.o: AnalyseData.cxx CustomFunctions.h
 	${CC} ${FLAGS} -c AnalyseData.cxx
 
 clean:
-	@rm -f *.o *~
+	@rm -fv *.o *~ Outputs/*.txt
 
 cleantarget:
-	@rm -f ${TARGET}
+	@rm -fv ${TARGET}
 
 run: ${TARGET}
 	./${TARGET}

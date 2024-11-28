@@ -17,10 +17,10 @@ FiniteFunctions.o : FiniteFunctions.cxx FiniteFunctions.h
 	${CC} ${FLAGS} ${LIBS} -c FiniteFunctions.cxx
 
 clean: #No targets just run shell command to rm object files and emacs backups
-	@rm -f *.o *~
+	@rm -fv *.o *~
 
 cleantarget: #Delete the exectuable
-	@rm -f ${TARGET}
+	@rm -fv ${TARGET}
 
 CustomFunctions.o: ../Ex1_2/CustomFunctions.cxx ../Ex1_2/CustomFunctions.h
 	${CC} ${FLAGS} -c ../Ex1_2/CustomFunctions.cxx
