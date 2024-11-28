@@ -1,10 +1,14 @@
 #include <iostream>
-#include <stdexcept>
-#include <limits>
+#include <vector>
+#include <sstream>
+#include <climits>
 
 #include "CustomFunctions.h"
 
-//For the program's menu, can add more options but keep All and Quit as last two
+// For the program's menu, can add more options but keep All and Quit as last two, and values must be continuous ints i.e. 1,2,3
+// Intended to use enum as a safeguard to prevent invalid input from breaking the program like I would do in rust, but couldn't
+// quite achieve the same effect, and is a little redundant now with the other guards I've put in place, kept it around though
+// for nicer readability in the switch and not worrying about what number maps to which operation
 enum Operations {
     PrintDataPoints = 1,
     CalcMagDataPoints,
@@ -21,21 +25,22 @@ std::vector<std::string> menu_options = {
     std::to_string(Operations::All) + ") All of the above",
     std::to_string(Operations::Quit) + ") Quit",
 };
-//Get integer input from user in range min <= x < max
-int get_int_input(int range_min, int range_max) {
-    int user_input = 0;
-	bool valid_input = false;
-    do {
-        std::cin >> user_input;
+// Get integer input from user in range min <= x < max
+int get_int_input(int range_min, int range_max, std::string invalid_input_msg) {
+    std::string user_input_string;
+    int user_int;
+    
+    while (true) {
+        std::getline(std::cin, user_input_string);
+        std::stringstream inputStream(user_input_string);
 
-        if (!(valid_input = std::cin.good() && range_min <= user_input && user_input < range_max)) {
-            std::cout << "Invalid input, please try again\n";
-            std::cin.clear();
-            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+        // Try to parse input as a valid integer
+        if (inputStream >> user_int && inputStream.eof() && range_min <= user_int && user_int < range_max) {
+            return user_int;
         }
 
-    } while (!valid_input);
-    return user_input;
+        std::cout << "Invalid input: " << invalid_input_msg << std::endl;
+    }
 }
 
 int main() {
@@ -48,14 +53,13 @@ int main() {
     std::vector<Point> error_points = strings_to_points(error);
 
     int data_size = data_points.size();
+    std::cout << "Found " << data_size << " data points" << std::endl;
 
     enum Operations user_operation;
-
-    bool running = true;
     bool take_user_input = true;
     int user_input;
     
-    while (running == true) {
+    while (true) {
         if (take_user_input == false) {
             user_input++;
             if (user_input == menu_options.size() - 1) {
@@ -64,18 +68,19 @@ int main() {
             }
         }
         if (take_user_input == true) {
-            std::cout << "Select function:" << std::endl;
+            std::cout << "Select operation:" << std::endl;
             print_n_lines(menu_options, menu_options.size());
 
-            user_input = get_int_input(0, menu_options.size());
+            user_input = get_int_input(0, menu_options.size(), "Please enter one of the options listed");
         }
 
         user_operation = (Operations)user_input;
         switch (user_operation) {
             case PrintDataPoints: {
                 std::cout << "Printing data points" << std::endl;
-                print_n_lines(data_points, data_size);
-                std::cout << user_operation << std::endl;
+                std::cout << "How many data points would you like to print?: ";
+                int n = get_int_input(1, INT_MAX, "Please enter a positive integer"); // Reusing this function and using INT_MAX so I don't have to rewrite int input handling
+                print_n_lines(data_points, n);
                 break;
             }
             case CalcMagDataPoints: {
@@ -111,12 +116,10 @@ int main() {
             }
             case Quit: {
                 std::cout << "Goodbye!" << std::endl;
-                running = false;
-                break;
+                return 0;
             }
             default:
-                // throw std::runtime_error("Error: Invalid value for user_input");
-                std::cout << "Invalid input, please try again" << std::endl;
+                throw std::runtime_error("Error: Invalid value for user_operation");
         }
     }
 }

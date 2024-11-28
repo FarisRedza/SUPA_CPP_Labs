@@ -1,12 +1,18 @@
+#include <iostream>
+#include <vector>
+#include <fstream>
+#include <sstream>
+#include <cmath>
+
 #include "CustomFunctions.h"
 
-//For printing Point structs
+// For printing Point structs
 std::ostream& operator<<(std::ostream &os, const Point &point) {
     os << "(" << point.x << ", " << point.y << ")";
     return os;
 }
 
-//Reads a file and returns a vector of strings
+// Reads a file and returns a vector of strings
 std::vector<std::string> read_file(std::string file_name) {
     std::ifstream file(file_name);
     std::vector<std::string> text;
@@ -23,7 +29,7 @@ std::vector<std::string> read_file(std::string file_name) {
     return text;
 }
 
-//Converts strings to Point structs
+// Converts strings to Point structs
 std::vector<Point> strings_to_points(std::vector<std::string> text) {
     std::vector<Point> points;
     for (std::string line : text) {
@@ -38,7 +44,7 @@ std::vector<Point> strings_to_points(std::vector<std::string> text) {
     return points;
 }
 
-//Returns the magnitude of a Point
+// Returns the magnitude of a Point
 std::vector<float> calculate_magnitude(std::vector<Point> points) {
     std::vector<float> magnitudes;
     for (Point point : points) {
@@ -47,7 +53,7 @@ std::vector<float> calculate_magnitude(std::vector<Point> points) {
     return magnitudes;
 }
 
-//Performs least squares fit on a vector of Point structs
+// Performs least squares fit on a vector of Point structs
 std::string least_squares(std::vector<Point> data_points, std::vector<Point> error_points) {
     float sum_x = 0, sum_y = 0, sum_xy = 0, sum_x2 = 0;
     for (Point data_point : data_points) {
@@ -61,7 +67,7 @@ std::string least_squares(std::vector<Point> data_points, std::vector<Point> err
     float p = (n * sum_xy - sum_x * sum_y) / denominator;
     float q = (sum_x2 * sum_y - sum_xy * sum_x) / denominator;
 
-    //χ^2 test
+    // χ^2 test
     float expected_y, y_diff2, sigma2, chi2 = 0;
     for (int i = 0; i < n; i++) {
         expected_y = p * data_points[i].x + q;
@@ -71,14 +77,14 @@ std::string least_squares(std::vector<Point> data_points, std::vector<Point> err
 
         chi2 += y_diff2 / sigma2;
     }
-    //Degrees of freedom
+    // Degrees of freedom
     float ndf = n - 2;
     float chi2_over_ndf = chi2 / ndf;
 
     return "y = " + std::to_string(p) + "x + " + std::to_string(q) + "\nχ^2/NDF = " + std::to_string(chi2_over_ndf);
 }
 
-//Raise a float x to the power of an int y
+// Raise a float x to the power of an int y
 float power(float x, int y) {
     if (y == 0)
         return 1;
