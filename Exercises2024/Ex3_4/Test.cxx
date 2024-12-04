@@ -23,8 +23,16 @@ int main() {
     double min = *std::min_element(data_val.begin(), data_val.end());
     double max = *std::max_element(data_val.begin(), data_val.end());
 
-    FiniteFunction test(min, max, "test.txt");
-    test.printInfo();
-    test.plotData(data_val, 100);
-    test.plotFunction();
+    NormalDistribution nd(min, max, "MyNormalDistribution.txt");
+    nd.plotFunction();
+    nd.calc_mean(data_val);
+    nd.calc_st_dev(data_val);
+    nd.plotData(data_val, 50);
+    nd.printInfo();
+
+    CauchyLorentz cl(min, max, "MyCauchyLorentz.txt");
+    cl.plotFunction();
+    cl.get_peak(data_val);
+    cl.plotData(data_val, 50);
+    cl.printInfo();
 }

@@ -47,3 +47,43 @@ protected:
 private:
   double invxsquared(double x); //The default functional form
 };
+
+
+class NormalDistribution : public FiniteFunction {
+public:
+  NormalDistribution(); //Empty constructor
+  NormalDistribution(double range_min, double range_max, std::string outfile); 
+  void printInfo();
+  double callFunction(double x);
+  void calc_mean(std::vector<double> points);
+  void calc_st_dev(std::vector<double> points);
+private:
+  double m_mean;
+  double m_st_dev;
+  double normaldistribution(double x);
+};
+
+
+class CauchyLorentz : public FiniteFunction {
+public:
+  CauchyLorentz();
+  CauchyLorentz(double range_min, double range_max, std::string outfile);
+  void printInfo();
+  double callFunction(double x);
+  void get_peak(std::vector<double> points);
+private:
+  double m_peak;
+  double m_gamma;
+  double cauchylorentz(double x);
+};
+
+
+class CrystalBall : public FiniteFunction {
+public:
+  CrystalBall();
+  CrystalBall(double range_min, double range_max, std::string outfile);
+  void printInfo();
+  double callFunction(double x);
+private:
+  double crystalball(double x);
+};

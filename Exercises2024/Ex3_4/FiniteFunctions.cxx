@@ -3,6 +3,9 @@
 #include <vector>
 #include "FiniteFunctions.h"
 #include <filesystem> //To check extensions in a nice way
+#include <cmath>
+#include <numeric>
+#include <algorithm>
 
 #include "gnuplot-iostream.h" //Needed to produce plots (not part of the course) 
 
@@ -62,8 +65,15 @@ Integration by hand (output needed to normalise function when plotting)
 ###################
 */ 
 double FiniteFunction::integrate(int Ndiv){ //private
+  double step_size = (m_RMax - m_RMin) / Ndiv;
+  double sum = 0.5 * (this->callFunction(m_RMax) + this->callFunction(m_RMin));
+
+  for (int i = 1; i < Ndiv; ++i) {
+        sum += this->callFunction(m_RMin + i * step_size);
+    }
+  return sum * step_size;
   //ToDo write an integrator
-  return -99;  
+  // return -99;
 }
 double FiniteFunction::integral(int Ndiv) { //public
   if (Ndiv <= 0){
@@ -234,4 +244,110 @@ void FiniteFunction::generatePlot(Gnuplot &gp){
     gp << "plot '-' with points ps 2 lc rgb 'blue' title 'sampled data'\n";
     gp.send1d(m_samples);
   }
+}
+
+
+NormalDistribution::NormalDistribution(){
+  m_RMin = -5.0;
+  m_RMax = 5.0;
+  this->checkPath("DefaultFunction");
+  m_Integral = NULL;
+}
+
+NormalDistribution::NormalDistribution(double range_min, double range_max, std::string outfile){
+  m_RMin = range_min;
+  m_RMax = range_max;
+  m_Integral = NULL;
+  this->checkPath(outfile); //Use provided string to name output files
+}
+
+double NormalDistribution::normaldistribution(double x) {
+  double st_dev = 1;
+  return std::exp(-0.5 * pow((x - m_mean) / st_dev, 2)) / (st_dev * std::sqrt(2 * M_PI));
+}
+
+void NormalDistribution::printInfo(){
+  std::cout << "rangeMin: " << m_RMin << std::endl;
+  std::cout << "rangeMax: " << m_RMax << std::endl;
+  std::cout << "integral: " << m_Integral << ", calculated using " << m_IntDiv << " divisions" << std::endl;
+  std::cout << "function: " << m_FunctionName << std::endl;
+  std::cout << "mean: " << m_mean << std::endl;
+  std::cout << "std: " << m_st_dev << std::endl;
+}
+
+double NormalDistribution::callFunction(double x) {return this->normaldistribution(x);}
+
+void NormalDistribution::calc_mean(std::vector<double> points) {
+  m_mean = std::accumulate(points.begin(), points.end(), 0);
+}
+
+void NormalDistribution::calc_st_dev(std::vector<double> points) {
+  double sum = 0;
+  for (double point: points) {
+    sum += std::pow(point - m_mean, 2);
+  }
+  m_st_dev = std::sqrt(sum / points.size());
+}
+
+
+CauchyLorentz::CauchyLorentz() {
+  m_RMin = -5.0;
+  m_RMax = 5.0;
+  this->checkPath("DefaultFunction");
+  m_Integral = NULL;
+}
+
+CauchyLorentz::CauchyLorentz(double range_min, double range_max, std::string outfile){
+  m_RMin = range_min;
+  m_RMax = range_max;
+  m_Integral = NULL;
+  this->checkPath(outfile); //Use provided string to name output files
+}
+
+void CauchyLorentz::get_peak(std::vector<double> points) {
+  m_peak = *std::max_element(points.begin(), points.end());
+}
+
+void CauchyLorentz::printInfo(){
+  std::cout << "rangeMin: " << m_RMin << std::endl;
+  std::cout << "rangeMax: " << m_RMax << std::endl;
+  std::cout << "integral: " << m_Integral << ", calculated using " << m_IntDiv << " divisions" << std::endl;
+  std::cout << "function: " << m_FunctionName << std::endl;
+  std::cout << "peak: " << m_peak << std::endl;
+  std::cout << "gamma: " << m_gamma << std::endl;
+}
+
+double CauchyLorentz::callFunction(double x) {return this->cauchylorentz(x);}
+
+double CauchyLorentz::cauchylorentz(double x) {
+  double gamma = 1;
+  return 1 / (M_PI * gamma * (1 + std::pow(x - m_peak, 2)));
+}
+
+
+CrystalBall::CrystalBall() {
+  m_RMin = -5.0;
+  m_RMax = 5.0;
+  this->checkPath("DefaultFunction");
+  m_Integral = NULL;
+}
+
+CrystalBall::CrystalBall(double range_min, double range_max, std::string outfile){
+  m_RMin = range_min;
+  m_RMax = range_max;
+  m_Integral = NULL;
+  this->checkPath(outfile); //Use provided string to name output files
+}
+
+void CrystalBall::printInfo(){
+  std::cout << "rangeMin: " << m_RMin << std::endl;
+  std::cout << "rangeMax: " << m_RMax << std::endl;
+  std::cout << "integral: " << m_Integral << ", calculated using " << m_IntDiv << " divisions" << std::endl;
+  std::cout << "function: " << m_FunctionName << std::endl;
+}
+
+double CrystalBall::callFunction(double x) {return this->crystalball(x);}
+
+double CrystalBall::crystalball(double x) {
+  return x;
 }
