@@ -1,6 +1,7 @@
 #include <iostream>
 #include <bits/stdc++.h>
 #include <vector>
+#include <numeric>
 
 #include "FiniteFunctions.h"
 #include "../Ex1_2/CustomFunctions.h"
@@ -19,20 +20,26 @@ int main() {
         }
     }
 
-    // print_n_lines(data, data.size());
     double min = *std::min_element(data_val.begin(), data_val.end());
     double max = *std::max_element(data_val.begin(), data_val.end());
 
-    NormalDistribution nd(min, max, "MyNormalDistribution.txt");
-    nd.plotFunction();
-    nd.calc_mean(data_val);
-    nd.calc_st_dev(data_val);
-    nd.plotData(data_val, 50);
-    nd.printInfo();
+    // FiniteFunction ff(min, max, "MyInvXsq.txt");
+    // ff.plotFunction();
+    // ff.plotData(data_val, 50);
+    // ff.printInfo();
 
-    CauchyLorentz cl(min, max, "MyCauchyLorentz.txt");
-    cl.plotFunction();
-    cl.get_peak(data_val);
-    cl.plotData(data_val, 50);
-    cl.printInfo();
+    // NormalDistribution nd(min, max, -1, 1.65, "MyNormalDistribution.txt");
+    // nd.plotFunction();
+    // nd.plotData(data_val, 50);
+    // nd.printInfo();
+
+    // CauchyLorentz cl(min, max, -1, 1.49, "MyCauchyLorentz.txt");
+    // cl.plotFunction();
+    // cl.plotData(data_val, 50);
+    // cl.printInfo();
+
+    CrystalBall cb(min, max, 3.25, 0.85, 1.4, -1, "MyCrystalBall.txt");
+    cb.plotFunction();
+    // cb.plotData(data_val, 50);
+    cb.printInfo();
 }

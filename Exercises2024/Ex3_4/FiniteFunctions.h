@@ -48,42 +48,50 @@ private:
   double invxsquared(double x); //The default functional form
 };
 
-
 class NormalDistribution : public FiniteFunction {
 public:
-  NormalDistribution(); //Empty constructor
-  NormalDistribution(double range_min, double range_max, std::string outfile); 
+  NormalDistribution();
+  NormalDistribution(double range_min, double range_max, double mu, double sigma, std::string outfile);
   void printInfo();
   double callFunction(double x);
-  void calc_mean(std::vector<double> points);
-  void calc_st_dev(std::vector<double> points);
 private:
-  double m_mean;
-  double m_st_dev;
+  double m_mu;
+  double m_sigma;
   double normaldistribution(double x);
 };
-
 
 class CauchyLorentz : public FiniteFunction {
 public:
   CauchyLorentz();
-  CauchyLorentz(double range_min, double range_max, std::string outfile);
+  CauchyLorentz(double range_min, double range_max, double x_0, double gamma, std::string outfile);
   void printInfo();
   double callFunction(double x);
-  void get_peak(std::vector<double> points);
 private:
-  double m_peak;
+  double m_x_0;
   double m_gamma;
   double cauchylorentz(double x);
 };
 
-
 class CrystalBall : public FiniteFunction {
 public:
   CrystalBall();
-  CrystalBall(double range_min, double range_max, std::string outfile);
+  CrystalBall(double range_min, double range_max, double n, double alpha, double sigma, double x_bar, std::string outfile);
   void printInfo();
   double callFunction(double x);
 private:
+  double m_n;
+  double m_alpha;
+  double m_sigma;
+  double m_x_bar;
+  double m_A;
+  double m_B;
+  double m_N;
+  double m_C;
+  double m_D;
+  void calc_A();
+  void calc_B();
+  void calc_N();
+  void calc_C();
+  void calc_D();
   double crystalball(double x);
 };
