@@ -247,7 +247,7 @@ void FiniteFunction::generatePlot(Gnuplot &gp){
   }
 }
 
-std::vector<double> FiniteFunction::metropolis(double iterations, double std_dev) {
+std::vector<double> FiniteFunction::metropolis(int iterations, double std_dev) {
   std::vector<double> sample_data;
 
   std::random_device rd;

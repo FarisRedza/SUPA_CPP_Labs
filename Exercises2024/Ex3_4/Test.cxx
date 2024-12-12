@@ -6,7 +6,6 @@
 
 #include "FiniteFunctions.h"
 #include "Distributions.h"
-#include "Sampling.h"
 #include "../Ex1_2/CustomFunctions.h"
 
 int main() {
@@ -23,43 +22,48 @@ int main() {
         }
     }
 
+    int data_val_size = data_val.size();
+
     double min = *std::min_element(data_val.begin(), data_val.end());
     double max = *std::max_element(data_val.begin(), data_val.end());
 
-    FiniteFunction ff(min, max, "MyInvXsq.txt");
-    ff.plotFunction();
-    ff.plotData(data_val, 50);
-    ff.printInfo();
-    std::vector<double> ff_sample_data = ff.metropolis(data_val.size(), 30);
-    ff.plotData(ff_sample_data, 50, false);
+    int Nbins = 50;
+    int metro_std_dev = 30;
 
-    NormalDistribution nd(
-        min, //range_min
-        max, //range_max
-        // -1, //mean
-        // 1.65, //std_dev
-        data_val, //data
-        "MyNormalDistribution.txt" //outfile
-    );
-    nd.plotFunction();
-    nd.plotData(data_val, 50);
-    nd.printInfo();
-    std::vector<double> nd_sample_data = nd.metropolis(data_val.size(), 30);
-    nd.plotData(nd_sample_data, 50, false);
+    // FiniteFunction ff(min, max, "MyInvXsq.txt");
+    // ff.plotFunction();
+    // ff.plotData(data_val, Nbins);
+    // ff.printInfo();
+    // std::vector<double> ff_sample_data = ff.metropolis(data_val_size, metro_std_dev);
+    // ff.plotData(ff_sample_data, Nbins, false);
 
-    CauchyLorentz cl(
-        min, //range_min
-        max, //range_max
-        // -1, //median
-        // 1.49, //scale_paramter
-        data_val, //data
-        "MyCauchyLorentz.txt" //outfile
-    );
-    cl.plotFunction();
-    cl.plotData(data_val, 50);
-    cl.printInfo();
-    std::vector<double> cl_sample_data = cl.metropolis(data_val.size(), 30);
-    cl.plotData(cl_sample_data, 50, false);
+    // NormalDistribution nd(
+    //     min, //range_min
+    //     max, //range_max
+    //     // -1, //mean
+    //     // 1.65, //std_dev
+    //     data_val, //data
+    //     "MyNormalDistribution.txt" //outfile
+    // );
+    // nd.plotFunction();
+    // nd.plotData(data_val, Nbins);
+    // nd.printInfo();
+    // std::vector<double> nd_sample_data = nd.metropolis(data_val_size, metro_std_dev);
+    // nd.plotData(nd_sample_data, Nbins, false);
+
+    // CauchyLorentz cl(
+    //     min, //range_min
+    //     max, //range_max
+    //     // -1, //median
+    //     // 1.49, //scale_paramter
+    //     data_val, //data
+    //     "MyCauchyLorentz.txt" //outfile
+    // );
+    // cl.plotFunction();
+    // cl.plotData(data_val, Nbins);
+    // cl.printInfo();
+    // std::vector<double> cl_sample_data = cl.metropolis(data_val_size, metro_std_dev);
+    // cl.plotData(cl_sample_data, Nbins, false);
 
     CrystalBall cb(
         min, //range_min
@@ -72,8 +76,8 @@ int main() {
         "MyCrystalBall.txt" //outfile
     );
     cb.plotFunction();
-    cb.plotData(data_val, 50);
+    cb.plotData(data_val, Nbins);
     cb.printInfo();
-    std::vector<double> cb_sample_data = cb.metropolis(data_val.size(), 30);
-    cb.plotData(cb_sample_data, 50, false);
+    std::vector<double> cb_sample_data = cb.metropolis(data_val_size, metro_std_dev);
+    cb.plotData(cb_sample_data, Nbins, false);
 }
