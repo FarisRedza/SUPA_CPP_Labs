@@ -6,6 +6,7 @@
 #include <cmath>
 #include <numeric>
 #include <algorithm>
+#include <random>
 
 #include "gnuplot-iostream.h" //Needed to produce plots (not part of the course) 
 
@@ -244,4 +245,32 @@ void FiniteFunction::generatePlot(Gnuplot &gp){
     gp << "plot '-' with points ps 2 lc rgb 'blue' title 'sampled data'\n";
     gp.send1d(m_samples);
   }
+}
+
+std::vector<double> FiniteFunction::metropolis(double iterations, double std_dev) {
+  std::vector<double> sample_data;
+
+  std::random_device rd;
+	std::mt19937 mtEngine{rd()};
+  std::uniform_real_distribution<double> uniform_dist(m_RMin, m_RMax);
+	std::uniform_real_distribution<double> uniform_01(0.0, 1.0);
+
+  double x_i = uniform_dist(mtEngine);
+  sample_data.push_back(x_i);
+  std::normal_distribution<double> normal_dist(x_i, std_dev);
+
+  double y, A, T;
+  for (int i = 0; i < iterations; i++) {
+    x_i = sample_data.back();
+    y = normal_dist(mtEngine);
+    A = std::min(this->callFunction(y) / this->callFunction(x_i), 1.0);
+    T = uniform_01(mtEngine);
+
+    if (T < A) {
+      sample_data.push_back(y);
+    } else {
+      sample_data.push_back(x_i);
+    }
+  }
+  return sample_data;
 }

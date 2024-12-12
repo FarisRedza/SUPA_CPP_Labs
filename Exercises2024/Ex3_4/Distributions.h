@@ -92,8 +92,11 @@ private:
     void calc_N();
     void calc_C();
     void calc_D();
-    double m_residuals
-    void calc_residuals();
+    double m_residuals;
+    std::vector<double> m_model;
+    double calc_residuals(std::vector<double> data);
     void calc_model();
+    void fit_crystalball(std::vector<double>data);
+    void generateModel(std::vector<double> data);
     double crystalball(double x);
 };

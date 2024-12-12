@@ -202,8 +202,8 @@ CrystalBall::CrystalBall(
     m_RMax = range_max;
     m_mean = calc_mean(data);
     m_std_dev = calc_std_dev(data, m_mean);
-    m_transition_point = transition_point;
-    m_tail_shape_parameter = tail_shape_parameter;
+    m_transition_point = NULL;
+    m_tail_shape_parameter = NULL;
     m_Integral = NULL;
     this->checkPath(outfile); //Use provided string to name output files
     m_A = NULL;
@@ -235,44 +235,42 @@ void CrystalBall::calc_D() {
     m_D = std::sqrt(M_PI / 2) * (1 + std::erf(std::abs(m_transition_point) / std::sqrt(2)));
 }
 
-void CrystalBall::calc_residuals(const std::vector<double>& data, const std::vector<double>& model) {
+double CrystalBall::calc_residuals(std::vector<double> data) {
     double residuals = 0.0;
     for (size_t i = 0; i < data.size(); ++i) {
-        m_residuals += std::pow(data[i] - model[i], 2);
+        residuals += std::pow(data[i] - m_model[i], 2);
     }
     return residuals;
 }
 
 // Generate model values based on parameters
-std::vector<double> generateModel(const std::vector<double>& data, double mu, double sigma, double alpha, double n) {
-    std::vector<double> model;
-    model.reserve(data.size());
+void CrystalBall::generateModel(std::vector<double> data) {
+    m_model.reserve(data.size());
     for (double x : data) {
-        model.push_back(negativeCrystalBall(x, mu, sigma, alpha, n));
+        m_model.push_back(this->crystalball(x));
     }
-    return model;
 }
 
 // Simple fitting function (minimizing residuals)
-void fitNegativeCrystalBall(const std::vector<double>& data, double& mu, double& sigma, double& alpha, double& n) {
+void CrystalBall::fit_crystalball(std::vector<double>data) {
     double step = 0.01;
     double tolerance = 1e-6;
     double residuals = std::numeric_limits<double>::max();
 
     for (int iter = 0; iter < 1000; ++iter) {
         // Generate the model
-        auto model = generateModel(data, mu, sigma, alpha, n);
-        double newResiduals = calculateResiduals(data, model);
+        this->generateModel(data);
+        double newResiduals = calc_residuals(data);
 
         // Check convergence
         if (std::abs(newResiduals - residuals) < tolerance) break;
         residuals = newResiduals;
 
         // Adjust parameters slightly
-        mu += step;
-        sigma += step;
-        alpha += step;
-        n += step;
+        m_mean += step;
+        m_std_dev += step;
+        m_transition_point += step;
+        m_tail_shape_parameter += step;
     }
 }
 
